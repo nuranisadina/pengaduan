@@ -1,36 +1,52 @@
-@extends('layouts.app') <!-- Sesuaikan dengan layout kamu -->
+@extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <h1>Riwayat Pengaduan Dihapus</h1>
+    <div class="container">
+        <h1>Daftar Pengaduan Dihapus</h1>
 
-    <a href="{{ route('pengaduan.index') }}" class="btn btn-primary mb-3">Kembali</a>
+        <a href="{{ route('pengaduan.index') }}" class="btn btn-primary mb-3">Kembali ke Daftar Pengaduan</a>
 
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Nama Pelapor</th>
-                <th>Judul Pengaduan</th>
-                <th>Kategori</th>
-                <th>Status</th>
-                <th>Tanggal</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($pengaduans as $pengaduan)
+        @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        <table class="table table-bordered">
+            <thead>
                 <tr>
-                    <td>{{ $pengaduan->nama_pelapor }}</td>
-                    <td>{{ $pengaduan->judul_pengaduan }}</td>
-                    <td>{{ $pengaduan->kategori }}</td>
-                    <td>{{ $pengaduan->status }}</td>
-                    <td>{{ $pengaduan->tanggal_pengaduan }}</td>
+                    <th>Nama Pelapor</th>
+                    <th>Judul</th>
+                    <th>Isi Pengaduan</th>
+                    <th>Kategori</th>
+                    <th>Status</th>
+                    <th>Tanggal</th>
+                    <th>Aksi</th> {{-- Tambah kolom aksi --}}
                 </tr>
-            @endforeach
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach ($pengaduans as $pengaduan)
+                    <tr>
+                        <td>{{ $pengaduan->nama_pelapor }}</td>
+                        <td>{{ $pengaduan->judul_pengaduan }}</td>
+                        <td>{{ \Illuminate\Support\Str::limit($pengaduan->isi_pengaduan, 50, '...') }}</td>
+                        <td>{{ $pengaduan->kategori }}</td>
+                        <td>{{ $pengaduan->status }}</td>
+                        <td>{{ $pengaduan->tanggal_pengaduan }}</td>
+                        <td>
+                            <a href="{{ route('pengaduan.restore', $pengaduan->id) }}" class="btn btn-success btn-sm"
+                                onclick="return confirm('Yakin ingin memulihkan pengaduan ini?')">
+                                Pulihkan
+                            </a>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
 
-    <div class="d-flex justify-content-end">
-        {{ $pengaduans->links() }}
+        {{-- Pagination kanan bawah --}}
+        <div class="d-flex justify-content-end mt-3">
+            {{ $pengaduans->links() }}
+        </div>
     </div>
-</div>
 @endsection

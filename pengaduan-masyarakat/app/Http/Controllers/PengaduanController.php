@@ -95,17 +95,15 @@ class PengaduanController extends Controller
     }
 
     public function restore($id)
-{
-    $pengaduan = Pengaduan::onlyTrashed()->findOrFail($id);
-    $pengaduan->restore();
+    {
+        $pengaduan = Pengaduan::onlyTrashed()->findOrFail($id);
+        $pengaduan->restore();
 
-    return redirect()->route('pengaduan.terhapus')->with('success', 'Pengaduan berhasil direstore.');
-}
-public function terhapus()
-{
-    $pengaduans = Pengaduan::onlyTrashed()->paginate(10);
-    return view('pengaduan.terhapus', compact('pengaduans'));
-}
-
-
+        return redirect()->route('pengaduan.terhapus')->with('success', 'Pengaduan berhasil direstore.');
+    }
+    public function terhapus()
+    {
+        $pengaduans = Pengaduan::onlyTrashed()->paginate(10);
+        return view('pengaduan.terhapus', compact('pengaduans'));
+    }
 }
